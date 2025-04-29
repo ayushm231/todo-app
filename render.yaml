@@ -2,11 +2,12 @@ services:
   - type: web
     name: todo-backend
     env: node
+    rootDir: server
     buildCommand: npm install
     startCommand: node server.js
     envVars:
       - key: MONGO_URI
-        value: YOUR_MONGODB_CONNECTION_STRING
+        value: mongodb+srv://ayushm231:dbUserPass@cluster0.hnjxtwm.mongodb.net/todo-app?retryWrites=true&w=majority&appName=Cluster0
       - key: PORT
         value: 5000
     plan: free
