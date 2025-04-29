@@ -19,7 +19,9 @@ const App = () => {
   const fetchTodos = async (page = 1, userId = selectedUser) => {
     try {
       const query = userId ? `&createdBy=${userId}` : ""
-      const { data } = await axios.get(`/todos?page=${page}&limit=3${query}`)
+      const { data } = await axios.get(
+        `${VITE_API_BASE_URL}/todos?page=${page}&limit=3${query}`
+      )
       setTodos(data.todos)
       setPages(data.pages)
     } catch (error) {

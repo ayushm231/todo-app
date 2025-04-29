@@ -5,7 +5,7 @@ const UserSwitcher = ({ selectedUser, onUserChange }) => {
   const [users, setUsers] = useState([])
   useEffect(() => {
     const fetch = async () => {
-      const { data } = await axios.get("/users")
+      const { data } = await axios.get(`${VITE_API_BASE_URL}/users`)
       setUsers(data)
     }
     fetch()

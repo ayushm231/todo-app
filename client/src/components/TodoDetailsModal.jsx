@@ -16,7 +16,7 @@ const TodoDetailsModal = ({ todo, onClose, refetchTodos }) => {
     if (!confirm("Are you sure you want to delete this todo?")) return
 
     try {
-      await axios.delete(`/todos/${todo._id}`)
+      await axios.delete(`${VITE_API_BASE_URL}/todos/${todo._id}`)
       alert("Todo deleted successfully!")
       onClose() // Close the modal after delete
       if (refetchTodos) refetchTodos()
@@ -34,7 +34,7 @@ const TodoDetailsModal = ({ todo, onClose, refetchTodos }) => {
 
     try {
       // Fetch all users
-      const { data: allUsers } = await axios.get("/users")
+      const { data: allUsers } = await axios.get(`${VITE_API_BASE_URL}/users`)
 
       const validUsernames = allUsers.map((user) => user.username)
 
@@ -57,7 +57,7 @@ const TodoDetailsModal = ({ todo, onClose, refetchTodos }) => {
         .map((user) => user._id)
 
       // Send updated todo
-      await axios.put(`/todos/${todo._id}`, {
+      await axios.put(`${VITE_API_BASE_URL}/todos/${todo._id}`, {
         title: editTitle,
         description: editDescription,
         tags: tagList, // Save all tags
@@ -79,7 +79,7 @@ const TodoDetailsModal = ({ todo, onClose, refetchTodos }) => {
     if (!newNote.trim()) return alert("Note cannot be empty")
 
     try {
-      await axios.put(`/todos/${todo._id}`, {
+      await axios.put(`${VITE_API_BASE_URL}/todos/${todo._id}`, {
         notes: [...(todo.notes || []), { content: newNote }],
       })
 

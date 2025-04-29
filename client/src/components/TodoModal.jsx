@@ -11,7 +11,7 @@ const TodoModal = ({ onClose }) => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const { data } = await axios.get("/users") // Fetch users from API
+      const { data } = await axios.get(`${VITE_API_BASE_URL}/users`) // Fetch users from API
       setUsers(data) // Store users in state
       setCreatedBy(data[0]?._id || "") // Set first user as default creator
     }
@@ -47,7 +47,7 @@ const TodoModal = ({ onClose }) => {
       .map((user) => user._id)
 
     try {
-      await axios.post("/todos", {
+      await axios.post(`${VITE_API_BASE_URL}/todos`, {
         title,
         description,
         tags: tagList, // Save all tags
