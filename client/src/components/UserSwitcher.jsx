@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import axios from "../services/api"
 
+const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+
 const UserSwitcher = ({ selectedUser, onUserChange }) => {
   const [users, setUsers] = useState([])
   useEffect(() => {

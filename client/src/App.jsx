@@ -6,6 +6,8 @@ import Pagination from "./components/Pagination"
 import TodoDetailsModal from "./components/TodoDetailsModal"
 import UserSwitcher from "./components/UserSwitcher"
 
+const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+
 const App = () => {
   const [todos, setTodos] = useState([])
   const [openModal, setOpenModal] = useState(false)

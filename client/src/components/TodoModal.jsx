@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react"
 import axios from "../services/api"
 
+const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+
 const TodoModal = ({ onClose }) => {
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")

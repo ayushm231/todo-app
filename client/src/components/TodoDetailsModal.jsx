@@ -2,6 +2,8 @@ import { useState } from "react"
 import getPriorityColor from "../utils/helpers"
 import axios from "../services/api"
 
+const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+
 const TodoDetailsModal = ({ todo, onClose, refetchTodos }) => {
   if (!todo) return null
 
