@@ -16,7 +16,7 @@
 ### Deployment:
 
 - Frontend: Vercel
-- Backend: [local / your choice] (API URL configurable via `.env`)
+- Backend: Render
 
 ---
 
