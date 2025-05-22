@@ -21,15 +21,26 @@ export const getTodos = async (req, res) => {
 
     const skip = (page - 1) * limit
 
-    const { createdBy } = req.query
+    const { priority, tags, createdBy, sortBy } = req.query
+    const filter = {}
 
-    // Filter only if a user ID is provided
-    const filter = createdBy ? { createdBy } : {}
+    if (priority) filter.priority = priority
+    if (createdBy) filter.createdBy = createdBy
+    if (tags) {
+      const tagArray = tags.split(",").map((tag) => tag.trim())
+      filter.tags = { $in: tagArray }
+    }
+
+    let sort = { createdAt: -1 }
+    if (sortBy) {
+      const [field, order] = sortBy.split(":")
+      sort = { [field]: order === "asc" ? 1 : -1 }
+    }
 
     const todos = await Todo.find(filter)
       .populate("mentionedUsers")
       .populate("createdBy")
-      .sort({ createdAt: -1 }) // Newest first
+      .sort(sort) // Newest first
       .skip(skip)
       .limit(limit)
 

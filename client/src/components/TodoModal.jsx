@@ -40,7 +40,7 @@ const TodoModal = ({ onClose }) => {
 
     if (invalidMentions.length > 0) {
       alert(`These tagged users do not exist: ${invalidMentions.join(", ")}`)
-      return // 🚫 Block saving todo
+      return // Block saving todo
     }
 
     // Map valid mentions to user IDs

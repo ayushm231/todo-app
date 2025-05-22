@@ -12,18 +12,26 @@ const App = () => {
   const [todos, setTodos] = useState([])
   const [openModal, setOpenModal] = useState(false)
   const [selectedTodo, setSelectedTodo] = useState(null)
+  const [selectedPriority, setSelectedPriority] = useState("")
+  const [sortOrder, setSortOrder] = useState("")
+  const [tagFilter, setTagFilter] = useState("")
   const [page, setPage] = useState(1)
   const [pages, setPages] = useState(1)
+
   const [selectedUser, setSelectedUser] = useState(
     localStorage.getItem("userId") || ""
   )
 
   const fetchTodos = async (page = 1, userId = selectedUser) => {
     try {
-      const query = userId ? `&createdBy=${userId}` : ""
-      const { data } = await axios.get(
-        `${VITE_API_BASE_URL}/todos?page=${page}&limit=3${query}`
-      )
+      // const query = userId ? `&createdBy=${userId}` : ""
+      let query = `?page=${page}&limit=3`
+
+      if (userId) query += `&createdBy=${userId}`
+      if (selectedPriority) query += `&priority=${selectedPriority}`
+      if (tagFilter) query += `&tags=${encodeURIComponent(tagFilter)}`
+      if (sortOrder) query += `&sortBy=title:${sortOrder}`
+      const { data } = await axios.get(`${VITE_API_BASE_URL}/todos${query}`)
       setTodos(data.todos)
       setPages(data.pages)
     } catch (error) {
@@ -33,7 +41,7 @@ const App = () => {
 
   useEffect(() => {
     fetchTodos(page, selectedUser)
-  }, [page, selectedUser])
+  }, [page, selectedUser, selectedPriority, tagFilter, sortOrder])
 
   const handleUserChange = (userId) => {
     setSelectedUser(userId)
@@ -60,6 +68,37 @@ const App = () => {
             onUserChange={handleUserChange}
           />
         </div>
+
+        <div className="flex gap-4 mb-4">
+          <select
+            className="border p-2 rounded"
+            value={selectedPriority}
+            onChange={(e) => setSelectedPriority(e.target.value)}
+          >
+            <option value="">All Priorities</option>
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+          </select>
+
+          <input
+            type="text"
+            className="border p-2 rounded"
+            placeholder="Filter by tag"
+            value={tagFilter}
+            onChange={(e) => setTagFilter(e.target.value)}
+          />
+        </div>
+
+        <select
+          className="border p-2 rounded"
+          value={sortOrder}
+          onChange={(e) => setSortOrder(e.target.value)}
+        >
+          <option value="">Sort by Title</option>
+          <option value="asc">Title: A → Z</option>
+          <option value="desc">Title: Z → A</option>
+        </select>
 
         <div className="grid gap-4 mt-4">
           {todos.map((todo) => (
