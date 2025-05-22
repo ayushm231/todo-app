@@ -6,6 +6,8 @@ import Pagination from "./components/Pagination"
 import TodoDetailsModal from "./components/TodoDetailsModal"
 import UserSwitcher from "./components/UserSwitcher"
 import debounce from "lodash/debounce"
+import CSVUpload from "./components/CSVUpload"
+import { exportTodosToCSV } from "./utils/exportToCSV"
 
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
@@ -64,13 +66,23 @@ const App = () => {
       <div className="w-full max-w-6xl bg-gray-100 p-6 rounded-lg shadow-md">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-bold">Todo List</h1>
-          <button
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
-            onClick={() => setOpenModal(true)}
-          >
-            Add Todo
-          </button>
+          <div className="flex gap-2">
+            <button
+              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
+              onClick={() => setOpenModal(true)}
+            >
+              Add Todo
+            </button>
+            <button
+              onClick={() => exportTodosToCSV(todos)}
+              className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded"
+            >
+              Export Todos to CSV
+            </button>
+          </div>
         </div>
+
+        <CSVUpload onUploadComplete={() => fetchTodos(page, selectedUser)} />
 
         <div className="flex justify-start w-full">
           <UserSwitcher

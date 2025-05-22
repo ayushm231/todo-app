@@ -115,3 +115,37 @@ export const deleteTodo = async (req, res) => {
     res.status(400).json({ message: error.message })
   }
 }
+
+export const bulkCreateTodos = async (req, res) => {
+  try {
+    const { todos } = req.body
+
+    if (!Array.isArray(todos)) {
+      return res.status(400).json({ message: "Invalid data format" })
+    }
+
+    const insertedTodos = []
+
+    for (const todo of todos) {
+      const exists = await Todo.findOne({
+        title: todo.title,
+        createdBy: todo.createdBy,
+      })
+
+      if (!exists) {
+        insertedTodos.push(todo)
+      }
+    }
+
+    const created = await Todo.insertMany(insertedTodos)
+
+    res.status(200).json({
+      message: `${created.length} new todos created. ${
+        todos.length - created.length
+      } duplicates skipped.`,
+    })
+  } catch (error) {
+    console.error("Bulk upload error:", error)
+    res.status(500).json({ message: "Failed to save todos", error })
+  }
+}

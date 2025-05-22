@@ -6,11 +6,13 @@ import {
   getTodoById,
   updateTodo,
   deleteTodo,
+  bulkCreateTodos,
 } from "../controllers/todoController.js"
 
 const router = express.Router()
 
 router.route("/").post(UserAuth, createTodo).get(getTodos)
+router.post("/bulk", bulkCreateTodos)
 router
   .route("/:id")
   .get(getTodoById)
