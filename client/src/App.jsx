@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react"
+import { useCallback, useState, useEffect } from "react"
 import axios from "./services/api"
 import TodoCard from "./components/TodoCard"
 import TodoModal from "./components/TodoModal"
 import Pagination from "./components/Pagination"
 import TodoDetailsModal from "./components/TodoDetailsModal"
 import UserSwitcher from "./components/UserSwitcher"
+import debounce from "lodash/debounce"
 
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
@@ -14,12 +15,21 @@ const App = () => {
   const [selectedTodo, setSelectedTodo] = useState(null)
   const [selectedPriority, setSelectedPriority] = useState("")
   const [sortOrder, setSortOrder] = useState("")
+  const [rawTagInput, setRawTagInput] = useState("")
   const [tagFilter, setTagFilter] = useState("")
   const [page, setPage] = useState(1)
   const [pages, setPages] = useState(1)
 
   const [selectedUser, setSelectedUser] = useState(
     localStorage.getItem("userId") || ""
+  )
+
+  // Adding debouncing using useCallback
+  const debouncedSetTagFilter = useCallback(
+    debounce((value) => {
+      setTagFilter(value)
+    }, 500),
+    []
   )
 
   const fetchTodos = async (page = 1, userId = selectedUser) => {
@@ -85,8 +95,11 @@ const App = () => {
             type="text"
             className="border p-2 rounded"
             placeholder="Filter by tag"
-            value={tagFilter}
-            onChange={(e) => setTagFilter(e.target.value)}
+            value={rawTagInput}
+            onChange={(e) => {
+              setRawTagInput(e.target.value)
+              debouncedSetTagFilter(e.target.value)
+            }}
           />
         </div>
 
